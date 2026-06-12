@@ -93,9 +93,14 @@ onUnmounted(() => {
     <!-- Stat cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
       <StatCard label="Total players" :value="players.length" accent="green" />
-      <StatCard label="Total hours" :value="totalHours.toFixed(0)" accent="blue" />
       <StatCard label="Top player" :value="players[0]?.name ?? '—'" accent="gold" />
-      <StatCard label="Avg playtime" :value="avgHours.toFixed(1) + 'h'" accent="stone" />
+      <StatCard label="Total hours" :value="totalHours.toFixed(0)" accent="blue" />
+      <StatCard
+        label="Wage Equivalent"
+        :value="(totalHours * 50).toFixed(0) + ' THB'"
+        accent="stone"
+        tooltip="Calculated based on minimum hourly rate in Bangkok (50 THB/hr)"
+      />
     </div>
 
     <!-- Chart -->
