@@ -2,6 +2,7 @@ package main
 
 import (
 	"cmp"
+	"embed"
 	"encoding/json"
 	"log"
 	"math"
@@ -14,7 +15,9 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/adaptor"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/static"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -132,6 +135,9 @@ func transformResponse(pt_map map[string]int, ls_map map[string]time.Time) []API
 	return arr
 }
 
+//go:embed all:website/dist
+var staticFiles embed.FS
+
 func main() {
 	app := fiber.New(fiber.Config{
 		TrustProxy:  true,
@@ -142,15 +148,27 @@ func main() {
 	})
 
 	app.Use(logger.New())
+	app.Use(cors.New())
 
-	app.Get("/", func(c fiber.Ctx) error {
+	// embed FS doesn't store modtime properly
+	// these 4 lines are for preventing permanent cache due to 304 status code on static files
+	app.Use("/", func(c fiber.Ctx) error {
+		c.Request().Header.Del("If-Modified-Since")
+		return c.Next()
+	})
+
+	app.Use("/", static.New("website/dist", static.Config{
+		FS: staticFiles,
+	}))
+
+	app.Get("/api", func(c fiber.Ctx) error {
 		pt := getAllPlaytime()
 		ls := getAllLastSeen()
 		transformed := transformResponse(pt, ls)
 		return c.JSON(transformed)
 	})
 
-	app.Get("/metrics", adaptor.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	app.Get("/api/metrics", adaptor.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		reg := prometheus.NewRegistry()
 		playtime := prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{

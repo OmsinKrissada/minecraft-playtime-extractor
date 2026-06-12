@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-grass: #5d9e3f;
+  --color-dirt: #8b5e3c;
+  --color-stone: #898989;
+  --color-diamond: #4dd0e1;
+  --color-gold: #f5c518;
+  --color-iron: #c0c0c0;
+  --color-bg: #0d1117;
+  --color-surface: #161b22;
+  --color-surface2: #1c2330;
+  --color-muted: #7d8590;
+
+  --font-pixel: 'VT323', monospace;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Pixel grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s infinite;
+}
+.animate-slide-in {
+  animation: slide-in 0.4s ease both;
+}
+.animate-spin-slow {
+  animation: spin 1s linear infinite;
+}
