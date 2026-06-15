@@ -143,7 +143,7 @@ onUnmounted(() => {
         <span class="text-[0.65rem] uppercase tracking-[0.15em] text-muted">Hours played</span>
         <div class="flex-1 h-px bg-white/8"></div>
       </div>
-      <div class="bg-surface border border-white/8 rounded p-5">
+      <div class="bg-surface border border-white/8 rounded p-5 overflow-auto">
         <PlayerChart :players="players" />
       </div>
     </section>
