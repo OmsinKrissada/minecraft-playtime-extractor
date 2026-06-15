@@ -6,7 +6,7 @@ import PlayerChart from './components/PlayerChart.vue'
 import StatCard from './components/StatCard.vue'
 import { timeAgo } from './assets/utils.ts'
 
-const API = 'api/'
+const API = import.meta.env.VITE_BASE_API || 'api/'
 
 const worldCreationTime = '2026-05-17T07:00:00+07:00'
 const REFRESH_INTERVAL = 30
