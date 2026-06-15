@@ -33,7 +33,7 @@ function label(h: number) {
           :title="`${player.name}: ${label(player.playtime_hr)}`"
         ></div>
       </div>
-      <span class="text-[0.6rem] text-muted text-center truncate w-full">{{ player.name }}</span>
+      <span class="text-[0.6rem] text-muted text-center w-full">{{ player.name }}</span>
     </div>
   </div>
 </template>
