@@ -6,6 +6,7 @@ require (
 	github.com/Tnze/go-mc v1.20.2
 	github.com/gofiber/fiber/v3 v3.3.0
 	github.com/prometheus/client_golang v1.23.2
+	github.com/spf13/pflag v1.0.10
 )
 
 require (
