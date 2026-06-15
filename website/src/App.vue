@@ -127,8 +127,8 @@ onUnmounted(() => {
     <!-- Stat cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
       <StatCard label="Total players" :value="players.length" accent="green" />
-      <StatCard label="World run hours" :value="worldRunTime ?? 'N/A'" accent="gold" />
-      <StatCard label="Total hours" :value="totalHours.toFixed(0)" accent="blue" />
+      <StatCard label="World run hours" :value="worldRunTime ?? 'N/A'" accent="blue" />
+      <StatCard label="Total hours" :value="totalHours.toFixed(0)" accent="gold" />
       <StatCard
         label="Wage Equivalent"
         :value="(totalHours * 50).toFixed(0) + ' THB'"
