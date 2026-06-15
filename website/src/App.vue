@@ -39,14 +39,14 @@ async function refresh() {
 }
 
 let refreshTimer: number
-const refreshCountdown = ref(REFRESH_INTERVAL)
+const refreshCountdown = ref(0)
 
 onMounted(() => {
   refresh()
 
   refreshTimer = setInterval(() => {
     refreshCountdown.value--
-    if (refreshCountdown.value <= 0) {
+    if (refreshCountdown.value <= 0 && !refreshing.value) {
       refresh()
     }
   }, 1000)
