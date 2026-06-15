@@ -46,7 +46,7 @@ func transformResponse(pt_map map[string]int, ls_map map[string]time.Time) []API
 //go:embed all:website/dist
 var staticFiles embed.FS
 
-func initializeServer(enableWebUI bool, enablePrometheus bool) {
+func initializeServer() {
 	app := fiber.New(fiber.Config{
 		TrustProxy:  true,
 		ProxyHeader: fiber.HeaderXForwardedFor,
@@ -60,7 +60,7 @@ func initializeServer(enableWebUI bool, enablePrometheus bool) {
 
 	// embed FS doesn't store modtime properly
 	// these 4 lines are for preventing permanent cache due to 304 status code on static files
-	if enableWebUI {
+	if !config.DisableWebUI {
 		app.Use("/", func(c fiber.Ctx) error {
 			c.Request().Header.Del("If-Modified-Since")
 			return c.Next()
@@ -85,7 +85,7 @@ func initializeServer(enableWebUI bool, enablePrometheus bool) {
 		return c.JSON(resp)
 	})
 
-	if enablePrometheus {
+	if !config.DisableProm {
 		app.Get("/api/metrics", adaptor.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			reg := prometheus.NewRegistry()
 			playtime := prometheus.NewGaugeVec(

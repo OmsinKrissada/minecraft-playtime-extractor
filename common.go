@@ -11,9 +11,6 @@ import (
 	"github.com/Tnze/go-mc/nbt"
 )
 
-const SERVER_DIR = "."
-const WORLD_DIR_NAME = "world"
-
 const TICKS_IN_AN_HOUR = 20 * 60 * 60
 
 type UserCache struct {
@@ -22,7 +19,7 @@ type UserCache struct {
 }
 
 func getUsernameMap() map[string]string {
-	path := filepath.Join(SERVER_DIR, "usercache.json")
+	path := filepath.Join(config.ServerDir, "usercache.json")
 	data, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
@@ -67,7 +64,7 @@ func getSingleLastSeen(path string) time.Time {
 }
 
 func getAllPlaytime() map[string]int {
-	path := filepath.Join(SERVER_DIR, WORLD_DIR_NAME, "stats")
+	path := filepath.Join(config.WorldDir, "stats")
 	files, err := os.ReadDir(path)
 	if err != nil {
 		panic(err)
@@ -85,7 +82,7 @@ func getAllPlaytime() map[string]int {
 }
 
 func getAllLastSeen() map[string]time.Time {
-	path := filepath.Join(SERVER_DIR, WORLD_DIR_NAME, "stats")
+	path := filepath.Join(config.WorldDir, "stats")
 	files, err := os.ReadDir(path)
 	if err != nil {
 		panic(err)
@@ -109,7 +106,7 @@ type WorldNBT struct {
 }
 
 func getWorldRunTime() int64 {
-	path := filepath.Join(SERVER_DIR, WORLD_DIR_NAME, "level.dat")
+	path := filepath.Join(config.WorldDir, "level.dat")
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
