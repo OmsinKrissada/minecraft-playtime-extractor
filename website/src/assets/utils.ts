@@ -19,7 +19,7 @@ export function timeAgo(iso: string, forceRelative = false) {
 }
 
 export function isOnline(iso: string) {
-  return Date.now() - new Date(iso).valueOf() < 10 * 60 * 1000
+  return Date.now() - new Date(iso).valueOf() < 5 * 60 * 1000
 }
 
 export function fmtValue(h: number) {
