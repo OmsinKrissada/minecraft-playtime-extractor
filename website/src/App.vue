@@ -9,6 +9,7 @@ import { timeAgo } from './assets/utils.ts'
 const API = 'api/'
 
 const worldCreationTime = '2026-05-17T07:00:00+07:00'
+const REFRESH_INTERVAL = 30
 
 let players = ref<Player[]>([])
 let worldRunTime = ref<number | null>(null)
@@ -33,17 +34,26 @@ async function refresh() {
     minute: '2-digit',
   })
   refreshing.value = false
+
+  refreshCountdown.value = REFRESH_INTERVAL
 }
 
-let intervalId: number
+let refreshTimer: number
+const refreshCountdown = ref(REFRESH_INTERVAL)
 
 onMounted(() => {
   refresh()
-  intervalId = setInterval(refresh, 30_000)
+
+  refreshTimer = setInterval(() => {
+    refreshCountdown.value--
+    if (refreshCountdown.value <= 0) {
+      refresh()
+    }
+  }, 1000)
 })
 
 onUnmounted(() => {
-  clearInterval(intervalId)
+  clearInterval(refreshTimer)
 })
 </script>
 
@@ -60,7 +70,7 @@ onUnmounted(() => {
 
   <div class="relative z-10 max-w-[860px] mx-auto px-6 pt-10 pb-16">
     <!-- Header -->
-    <header class="flex items-start gap-5 mb-12">
+    <header class="flex items-start gap-5 mb-6">
       <img
         class="shrink-0 w-[72px] h-[72px] border-2 border-white/8 rounded bg-surface"
         style="image-rendering: pixelated"
@@ -84,18 +94,35 @@ onUnmounted(() => {
           </span>
           Currently Theta 1 Hotfix 3
         </p>
-
-        <div class="flex items-center gap-2 mt-3 flex-wrap">
-          <!-- Live pill -->
-          <span
-            class="inline-flex items-center gap-1.5 text-[0.7rem] text-grass border border-grass/30 bg-grass/8 px-2.5 py-1 rounded-[2px] tracking-wider"
-          >
-            <span class="w-1.5 h-1.5 rounded-full bg-grass animate-pulse-dot"></span>
-            LIVE
-          </span>
-        </div>
       </div>
     </header>
+
+    <div class="flex items-center gap-2 mb-6 flex-wrap">
+      <!-- Live pill -->
+      <span
+        class="inline-flex items-center gap-1.5 text-[0.7rem] text-grass border border-grass/30 bg-grass/8 px-2.5 py-1 rounded-[2px] tracking-wider"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-grass animate-pulse-dot"></span>
+        LIVE
+      </span>
+      <span class="text-xs text-muted">
+        {{ refreshCountdown > 0 ? `Refreshing in ${refreshCountdown}s` : 'Refreshing' }}
+      </span>
+
+      <svg
+        v-if="refreshCountdown <= 0"
+        class="text-muted animate-spin-slow"
+        width="11"
+        height="11"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <path d="M23 4v6h-6" />
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+      </svg>
+    </div>
 
     <!-- Stat cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
