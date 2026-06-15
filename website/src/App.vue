@@ -39,7 +39,7 @@ let intervalId: number
 
 onMounted(() => {
   refresh()
-  intervalId = setInterval(refresh, 60_000)
+  intervalId = setInterval(refresh, 30_000)
 })
 
 onUnmounted(() => {
