@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { BAR_COLORS, timeAgo, isOnline, fmtValue, fmtUnit, avatarUrl } from '@/assets/utils.ts'
-import type { APIResponse as PlayerResponse } from '@/assets/types'
+import type { Player } from '@/assets/types'
 
 const props = defineProps<{
-  player: PlayerResponse
+  player: Player
   index: number
   max: number
 }>()

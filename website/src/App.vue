@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import type { APIResponse } from './assets/types.ts'
+import type { APIResponse, Player } from './assets/types.ts'
 import PlayerRow from './components/PlayerRow.vue'
 import PlayerChart from './components/PlayerChart.vue'
 import StatCard from './components/StatCard.vue'
@@ -10,9 +10,10 @@ const API = 'api/'
 
 const worldCreationTime = '2026-05-17T07:00:00+07:00'
 
-let players = ref<APIResponse[]>([])
+let players = ref<Player[]>([])
+let worldRunTime = ref<number | null>(null)
+
 let totalHours = computed(() => players.value.reduce((s, p) => s + p.playtime_hr, 0))
-let avgHours = computed(() => totalHours.value / players.value.length)
 let maxHours = computed(() => players.value[0]?.playtime_hr ?? 1)
 let updatedAt = ref(
   new Date().toLocaleTimeString('en-US', {
@@ -24,7 +25,9 @@ let refreshing = ref(false)
 
 async function refresh() {
   refreshing.value = true
-  players.value = await fetch(API).then((r) => r.json())
+  const response = (await fetch(API).then((r) => r.json())) as APIResponse
+  players.value = response.players
+  worldRunTime.value = Math.round(response.world_run_time)
   updatedAt.value = new Date().toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
@@ -97,7 +100,7 @@ onUnmounted(() => {
     <!-- Stat cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
       <StatCard label="Total players" :value="players.length" accent="green" />
-      <StatCard label="Top player" :value="players[0]?.name ?? '—'" accent="gold" />
+      <StatCard label="World run hours" :value="worldRunTime ?? 'N/A'" accent="gold" />
       <StatCard label="Total hours" :value="totalHours.toFixed(0)" accent="blue" />
       <StatCard
         label="Wage Equivalent"

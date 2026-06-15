@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { APIResponse } from '@/assets/types'
+import type { Player } from '@/assets/types'
 import { BAR_COLORS } from '@/assets/utils'
 import { computed } from 'vue'
-const props = defineProps<{ players: APIResponse[] }>()
+const props = defineProps<{ players: Player[] }>()
 
 let max = computed(() => props.players[0]?.playtime_hr ?? 1)
 
