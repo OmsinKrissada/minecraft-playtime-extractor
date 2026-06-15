@@ -103,25 +103,21 @@ onUnmounted(() => {
         class="inline-flex items-center gap-1.5 text-[0.7rem] text-grass border border-grass/30 bg-grass/8 px-2.5 py-1 rounded-[2px] tracking-wider"
       >
         <span class="w-1.5 h-1.5 rounded-full bg-grass animate-pulse-dot"></span>
-        LIVE
+        {{ refreshCountdown > 0 ? `Updating in ${refreshCountdown}s` : 'Updating' }}
+        <svg
+          v-if="refreshCountdown <= 0"
+          class="text-grass animate-spin-slow"
+          width="11"
+          height="11"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path d="M23 4v6h-6" />
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+        </svg>
       </span>
-      <span class="text-xs text-muted">
-        {{ refreshCountdown > 0 ? `Refreshing in ${refreshCountdown}s` : 'Refreshing' }}
-      </span>
-
-      <svg
-        v-if="refreshCountdown <= 0"
-        class="text-muted animate-spin-slow"
-        width="11"
-        height="11"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-      >
-        <path d="M23 4v6h-6" />
-        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-      </svg>
     </div>
 
     <!-- Stat cards -->
