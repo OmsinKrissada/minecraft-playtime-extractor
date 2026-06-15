@@ -7,3 +7,7 @@ build-web:
 
 build-go:
 	go build -ldflags="-s -w" -trimpath
+
+clean:
+	go clean
+	cd website && rm -rf node_modules dist
