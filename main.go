@@ -23,7 +23,7 @@ func main() {
 
 	// reading
 	flag.StringVar(&config.WorldDir, "world", "./world", "Path to world directory")
-	flag.StringVar(&config.ServerDir, "server", ".", "Path to world directory")
+	flag.StringVar(&config.ServerDir, "server", ".", "Path to server directory where usercache.json lives")
 
 	flag.Parse()
 
