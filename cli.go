@@ -22,6 +22,10 @@ func printInfo() {
 	fmt.Printf("%-*v %8.2f hrs\n", maxLen+2, "World run time:", worldRunTime)
 	fmt.Println("Playtime:")
 	for _, u := range transformed {
-		fmt.Printf("  %-*v %8.2f hrs\n", maxLen, u.Name, u.PlaytimeHr)
+		name := u.Name
+		if name == "" {
+			name = "<unknown>"
+		}
+		fmt.Printf("  %-*v %8.2f hrs\n", maxLen, name, u.PlaytimeHr)
 	}
 }
