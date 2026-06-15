@@ -8,6 +8,8 @@ import { timeAgo } from './assets/utils.ts'
 
 const API = 'api/'
 
+const worldCreationTime = '2026-05-17T07:00:00+07:00'
+
 let players = ref<APIResponse[]>([])
 let totalHours = computed(() => players.value.reduce((s, p) => s + p.playtime_hr, 0))
 let avgHours = computed(() => totalHours.value / players.value.length)
@@ -74,8 +76,10 @@ onUnmounted(() => {
         <p class="text-[0.75rem] text-muted tracking-wide">
           <!-- Minecraft Server · Playtime Leaderboard -->
           <!-- Currently Theta 1 Hotfix 3 -->
-          World started {{ timeAgo('2026-05-17T07:00:00+07:00', true) }} · Currently Theta 1 Hotfix
-          3
+          <span v-if="worldCreationTime">
+            World started {{ timeAgo(worldCreationTime, true) }} ·
+          </span>
+          Currently Theta 1 Hotfix 3
         </p>
 
         <div class="flex items-center gap-2 mt-3 flex-wrap">
