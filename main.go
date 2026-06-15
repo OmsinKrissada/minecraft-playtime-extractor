@@ -2,6 +2,7 @@ package main
 
 import (
 	"cmp"
+	"compress/gzip"
 	"embed"
 	"encoding/json"
 	"log"
@@ -13,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Tnze/go-mc/nbt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/adaptor"
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -24,6 +26,8 @@ import (
 
 const SERVER_DIR = "."
 const WORLD_DIR_NAME = "world"
+
+const TICKS_IN_AN_HOUR = 20 * 60 * 60
 
 type UserCache struct {
 	Name string
@@ -111,6 +115,32 @@ func getAllLastSeen() map[string]time.Time {
 	return player_lastseen
 }
 
+type WorldNBT struct {
+	Data struct {
+		Time int64
+	}
+}
+
+func getWorldRunTime() int64 {
+	path := filepath.Join(SERVER_DIR, WORLD_DIR_NAME, "level.dat")
+	file, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	gzipReader, err := gzip.NewReader(file)
+	if err != nil {
+		panic(err)
+	}
+	defer gzipReader.Close()
+
+	var decoded WorldNBT
+	nbtDecoder := nbt.NewDecoder(gzipReader)
+	nbtDecoder.Decode(&decoded)
+	return decoded.Data.Time
+}
+
 type APIResponse struct {
 	Name       string  `json:"name"`
 	Uuid       string  `json:"uuid"`
@@ -165,7 +195,14 @@ func main() {
 		pt := getAllPlaytime()
 		ls := getAllLastSeen()
 		transformed := transformResponse(pt, ls)
-		return c.JSON(transformed)
+		worldRunTime := float64(getWorldRunTime()) / TICKS_IN_AN_HOUR
+		worldRunTime = math.Round(worldRunTime*100) / 100
+
+		resp := map[string]any{
+			"players":        transformed,
+			"world_run_time": worldRunTime,
+		}
+		return c.JSON(resp)
 	})
 
 	app.Get("/api/metrics", adaptor.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {

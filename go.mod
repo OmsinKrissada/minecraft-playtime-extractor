@@ -3,6 +3,7 @@ module github.com/OmsinKrissada/minecraft-playtime-api
 go 1.26.3
 
 require (
+	github.com/Tnze/go-mc v1.20.2
 	github.com/gofiber/fiber/v3 v3.3.0
 	github.com/prometheus/client_golang v1.23.2
 )
