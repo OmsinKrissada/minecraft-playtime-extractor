@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const props = withDefaults(
   defineProps<{
     label: string
@@ -17,6 +19,29 @@ const accents: Record<string, string> = {
   gold: 'after:bg-gold',
   stone: 'after:bg-stone',
 }
+
+const tooltipOpen = ref(false)
+const tooltipRef = ref<HTMLElement | null>(null)
+
+function toggleTooltip() {
+  tooltipOpen.value = !tooltipOpen.value
+}
+
+function handleOutside(e: MouseEvent | TouchEvent) {
+  if (tooltipRef.value && !tooltipRef.value.contains(e.target as Node)) {
+    tooltipOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleOutside)
+  document.addEventListener('touchstart', handleOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutside)
+  document.removeEventListener('touchstart', handleOutside)
+})
 </script>
 
 <template>
@@ -26,12 +51,13 @@ const accents: Record<string, string> = {
   >
     <div class="flex items-center gap-1.5 mb-2">
       <p class="text-[0.65rem] uppercase tracking-widest text-muted">{{ label }}</p>
-      <div v-if="props.tooltip" class="group relative flex items-center">
+      <div v-if="props.tooltip" ref="tooltipRef" class="group relative flex items-center">
         <svg
-          class="w-4 h-4 text-muted/50 hover:text-muted/80 transition-colors cursor-default"
+          class="w-4 h-4 text-muted/50 hover:text-muted/80 transition-colors cursor-pointer"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
+          @click.stop="toggleTooltip"
         >
           <path
             fill-rule="evenodd"
@@ -40,15 +66,15 @@ const accents: Record<string, string> = {
           />
         </svg>
         <div
-          class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+          class="pointer-events-none absolute bottom-full right-0 mb-2 z-10 transition-opacity duration-150 w-max max-w-[min(14rem,calc(100vw-2.5rem))]"
+          :class="tooltipOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'"
         >
           <div
-            class="bg-surface border border-white/12 rounded px-2.5 py-1.5 text-[0.65rem] text-muted/90 tracking-wide whitespace-nowrap shadow-lg"
+            class="bg-surface border border-white/12 rounded px-2.5 py-1.5 text-[0.65rem] text-muted/90 tracking-wide shadow-lg"
           >
             {{ props.tooltip }}
           </div>
-          <!-- Arrow -->
-          <div class="flex justify-center">
+          <div class="flex justify-end" style="padding-right: 0.375rem">
             <div class="w-2 h-2 bg-surface border-r border-b border-white/12 rotate-45 -mt-1" />
           </div>
         </div>
