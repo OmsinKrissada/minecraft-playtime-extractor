@@ -71,7 +71,7 @@ func getSinglePlaytime(path string) int {
 	return pt
 }
 
-func getLastSeen(path string) time.Time {
+func getSingleLastSeen(path string) time.Time {
 	filestat, err := os.Stat(path)
 	if err != nil {
 		panic(err)
@@ -107,7 +107,7 @@ func getAllLastSeen() map[string]time.Time {
 	player_lastseen := make(map[string]time.Time)
 	for _, f := range files {
 		playerStatPath := filepath.Join(path, f.Name())
-		ls := getLastSeen(playerStatPath)
+		ls := getSingleLastSeen(playerStatPath)
 		username, _, _ := strings.Cut(f.Name(), ".")
 		player_lastseen[username] = ls
 	}
@@ -153,7 +153,7 @@ func transformResponse(pt_map map[string]int, ls_map map[string]time.Time) []API
 
 	uc := getUsernameMap()
 	for uuid, pt := range pt_map {
-		pt_hours := float64(pt) / 20 / 60 / 60
+		pt_hours := float64(pt) / TICKS_IN_AN_HOUR
 		pt_hours = math.Round(pt_hours*100) / 100
 		arr = append(arr, APIResponse{Name: uc[uuid], Uuid: uuid, PlaytimeHr: pt_hours, LastSeen: ls_map[uuid].Format(time.RFC3339)})
 	}

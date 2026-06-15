@@ -103,7 +103,7 @@ onUnmounted(() => {
         label="Wage Equivalent"
         :value="(totalHours * 50).toFixed(0) + ' THB'"
         accent="stone"
-        tooltip="Calculated based on minimum hourly rate in Bangkok (50 THB/hr)"
+        tooltip="Calculated from total hours based on minimum hourly rate in Bangkok (50 THB/hr)"
       />
     </div>
 
@@ -139,7 +139,7 @@ onUnmounted(() => {
       target="_blank"
       rel="noopener"
       class="text-grass hover:underline"
-      >mc.krissada.com/star_tech/playtime/api</a
-    >
+      >mc.krissada.com/star_tech/playtime/api
+    </a>
   </footer>
 </template>
