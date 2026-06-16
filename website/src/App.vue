@@ -23,18 +23,25 @@ let updatedAt = ref(
   }),
 )
 let refreshing = ref(false)
+let lastRefreshFailed = ref(false)
 
 async function refresh() {
   refreshing.value = true
-  const response = (await fetch(API).then((r) => r.json())) as APIResponse
-  players.value = response.players
-  worldRunTime.value = Math.round(response.world_run_time)
-  updatedAt.value = new Date().toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-  refreshing.value = false
 
+  try {
+    const response = (await fetch(API).then((r) => r.json())) as APIResponse
+    players.value = response.players
+    worldRunTime.value = Math.round(response.world_run_time)
+    updatedAt.value = new Date().toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+    lastRefreshFailed.value = false
+  } catch (err) {
+    lastRefreshFailed.value = true
+  }
+
+  refreshing.value = false
   refreshCountdown.value = REFRESH_INTERVAL
 }
 
@@ -100,13 +107,21 @@ onUnmounted(() => {
     <div class="flex items-center gap-2 mb-6 flex-wrap">
       <!-- Live pill -->
       <span
-        class="inline-flex items-center gap-1.5 text-[0.7rem] text-grass border border-grass/30 bg-grass/8 px-2.5 py-1 rounded-[2px] tracking-wider"
+        class="inline-flex items-center gap-1.5 text-[0.7rem] border px-2.5 py-1 rounded-[2px] tracking-wider"
+        :class="{
+          'text-red-400 border-red-400/30 bg-red-400/8': lastRefreshFailed,
+          'text-grass border-grass/30 bg-grass/8': !lastRefreshFailed,
+        }"
       >
-        <span class="w-1.5 h-1.5 rounded-full bg-grass animate-pulse-dot"></span>
+        <span
+          class="w-1.5 h-1.5 rounded-full animate-pulse-dot"
+          :class="{ 'bg-red-400': lastRefreshFailed, 'bg-grass': !lastRefreshFailed }"
+        ></span>
         {{ refreshCountdown > 0 ? `Updating in ${refreshCountdown}s` : 'Updating' }}
         <svg
           v-if="refreshCountdown <= 0"
-          class="text-grass animate-spin-slow"
+          class="animate-spin-slow"
+          :class="{ 'text-red-400': lastRefreshFailed, 'text-grass': !lastRefreshFailed }"
           width="11"
           height="11"
           viewBox="0 0 24 24"
