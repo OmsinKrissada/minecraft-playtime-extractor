@@ -7,6 +7,8 @@ This is a very basic tool for extracting
 
 from a Minecraft server's files.
 
+And display the data **in the terminal**, **expose as an API**, or **view with a web UI**.
+
 ## How It Works
 This tool relies on reading game files directly. Since it's not a mod or plugin, it works on a vanilla server as well and doesn't require the Minecraft server to be running.
 
