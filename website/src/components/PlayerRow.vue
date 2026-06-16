@@ -63,9 +63,13 @@ const rankLabel = computed(() =>
         <span class="w-1.5 h-1.5 rounded-full bg-grass animate-pulse-dot"></span>
         ONLINE
       </span>
-      <span v-else class="text-[0.65rem] text-muted tracking-wide">{{
-        timeAgo(player.last_seen)
-      }}</span>
+      <span
+        v-else
+        class="text-[0.65rem] text-muted tracking-wide"
+        :title="new Date(player.last_seen).toString()"
+      >
+        {{ timeAgo(player.last_seen) }}
+      </span>
     </div>
 
     <!-- Playtime -->
