@@ -1,4 +1,4 @@
-# Minecraft Playtime Extractor
+# Minecraft Playtime Extractor & API
 
 This is a very basic tool for extracting
 - Player playtime
