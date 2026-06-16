@@ -1,4 +1,4 @@
-module github.com/OmsinKrissada/minecraft-playtime-api
+module github.com/OmsinKrissada/minecraft-playtime-extractor
 
 go 1.26.3
 
