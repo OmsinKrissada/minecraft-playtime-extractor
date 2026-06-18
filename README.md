@@ -26,7 +26,7 @@ When run without options, it will print out world run time and all players' play
 
 To list available options, you can run `./minecraft-playtime-extractor --help` which will give something similar to
 ```
-Usage of ./minecraft-playtime-api:
+Usage of ./minecraft-playtime-extractor:
       --no-prom         Disable serving prometheus metrics at /api/metrics (use with --serve)
       --no-ui           Disable serving web UI (use with --serve)
   -s, --serve           Start the web server
@@ -39,7 +39,7 @@ The default port is 8080. However you can change this by setting the "PORT" envi
 
 For example, to change the port to 3000 on a unix-like system you would run
 ```
-PORT=3000 ./minecraft-playtime-extractor
+PORT=3000 ./minecraft-playtime-extractor --serve
 ```
 
 There are only 2 main endpoints:
@@ -60,7 +60,7 @@ What you must have installed on your machine
 ### Build
 Static assets for the web UI are embedded into the output binary directly. For this reason, you have to build the Vue project before compiling the Go project.
 
-If you use wish to use the provided Makefile, you can just run
+If you wish to use the provided Makefile, you can just run
 ```
 make
 ```
