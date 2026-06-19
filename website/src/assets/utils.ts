@@ -31,5 +31,5 @@ export function fmtUnit(h: number) {
 }
 
 export function avatarUrl(uuid: string) {
-  return `https://mc-heads.net/avatar/${uuid}`
+  return `https://mc-heads.net/avatar/${uuid}/8`
 }
