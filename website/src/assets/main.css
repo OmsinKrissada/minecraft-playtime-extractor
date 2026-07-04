@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: Minecraft;
+  src: url(/Minecraft-Seven_v2.woff2);
+}
+
 @theme {
   --color-grass: #5d9e3f;
   --color-dirt: #8b5e3c;
@@ -14,6 +19,7 @@
 
   --font-pixel: 'VT323', monospace;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-minecraft: 'Minecraft', monospace;
 }
 
 html {

@@ -55,7 +55,9 @@ const rankLabel = computed(() =>
 
     <!-- Name + meta -->
     <div>
-      <p class="text-[0.9rem] font-semibold text-white tracking-wide mb-1.5">{{ player.name }}</p>
+      <p class="text-[0.9rem] font-semibold font-minecraft text-white tracking-wide mb-1">
+        {{ player.name }}
+      </p>
       <span
         v-if="online"
         class="inline-flex items-center gap-1 text-[0.6rem] text-grass border border-grass/35 bg-grass/10 px-1.5 py-0.5 rounded-[2px] tracking-wide"
