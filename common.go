@@ -35,10 +35,10 @@ func getUsernameMap() map[string]string {
 	return uuid_username_map
 }
 
-func getSinglePlaytime(path string) int {
+func getSinglePlaytime(path string) (int, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	type DecodedType struct {
@@ -52,51 +52,57 @@ func getSinglePlaytime(path string) int {
 	json.Unmarshal(data, &decoded)
 	pt := decoded.Stats.Custom.Playtime
 
-	return pt
+	return pt, nil
 }
 
-func getSingleLastSeen(path string) time.Time {
+func getSingleLastSeen(path string) (time.Time, error) {
 	filestat, err := os.Stat(path)
 	if err != nil {
-		panic(err)
+		return time.Time{}, err
 	}
-	return filestat.ModTime()
+	return filestat.ModTime(), nil
 }
 
-func getAllPlaytime() map[string]int {
+func getAllPlaytime() (map[string]int, error) {
 	path := filepath.Join(config.WorldDir, "stats")
 	files, err := os.ReadDir(path)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	user_playtime_tick := make(map[string]int)
 	for _, f := range files {
 		playerStatPath := filepath.Join(path, f.Name())
-		pt := getSinglePlaytime(playerStatPath)
+		pt, err := getSinglePlaytime(playerStatPath)
+		if err != nil {
+			return nil, err
+		}
 		username, _, _ := strings.Cut(f.Name(), ".")
 		user_playtime_tick[username] = pt
 	}
 
-	return user_playtime_tick
+	return user_playtime_tick, nil
 }
 
-func getAllLastSeen() map[string]time.Time {
+func getAllLastSeen() (map[string]time.Time, error) {
 	path := filepath.Join(config.WorldDir, "stats")
 	files, err := os.ReadDir(path)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	player_lastseen := make(map[string]time.Time)
 	for _, f := range files {
 		playerStatPath := filepath.Join(path, f.Name())
-		ls := getSingleLastSeen(playerStatPath)
+		ls, err := getSingleLastSeen(playerStatPath)
+		if err != nil {
+			return nil, err
+		}
 		username, _, _ := strings.Cut(f.Name(), ".")
 		player_lastseen[username] = ls
 	}
 
-	return player_lastseen
+	return player_lastseen, nil
 }
 
 type WorldNBT struct {

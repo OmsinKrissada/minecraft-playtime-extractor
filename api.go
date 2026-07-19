@@ -3,6 +3,7 @@ package main
 import (
 	"cmp"
 	"embed"
+	"fmt"
 	"log"
 	"math"
 	"net/http"
@@ -72,8 +73,14 @@ func initializeServer() {
 	}
 
 	app.Get("/api", func(c fiber.Ctx) error {
-		pt := getAllPlaytime()
-		ls := getAllLastSeen()
+		pt, err := getAllPlaytime()
+		if err != nil {
+			return fmt.Errorf("unable to read playtime data: %w", err)
+		}
+		ls, err := getAllLastSeen()
+		if err != nil {
+			return fmt.Errorf("unable to read lastseen data: %w", err)
+		}
 		transformed := transformResponse(pt, ls)
 		worldRunTime := float64(getWorldRunTime()) / TICKS_IN_AN_HOUR
 		worldRunTime = math.Round(worldRunTime*100) / 100
@@ -96,8 +103,20 @@ func initializeServer() {
 			)
 			reg.MustRegister(playtime)
 
-			pt := getAllPlaytime()
-			ls := getAllLastSeen()
+			pt, err := getAllPlaytime()
+			if err != nil {
+				log.Printf("failed to get playtime data: %v", err)
+				http.Error(w, "failed to retrieve playtime data", http.StatusInternalServerError)
+				return
+			}
+
+			ls, err := getAllLastSeen()
+			if err != nil {
+				log.Printf("failed to get last seen data: %v", err)
+				http.Error(w, "failed to retrieve last seen data", http.StatusInternalServerError)
+				return
+			}
+
 			transformed := transformResponse(pt, ls)
 
 			for _, p := range transformed {
