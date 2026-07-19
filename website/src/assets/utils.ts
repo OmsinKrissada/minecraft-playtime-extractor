@@ -19,7 +19,7 @@ export function timeAgo(iso: string, forceRelative = false) {
 }
 
 export function isOnline(iso: string) {
-  return Date.now() - new Date(iso).valueOf() < 5 * 60 * 1000
+  return Date.now() - new Date(iso).valueOf() < 6 * 60 * 1000
 }
 
 export function fmtValue(h: number) {
@@ -31,5 +31,5 @@ export function fmtUnit(h: number) {
 }
 
 export function avatarUrl(uuid: string) {
-  return `https://mc-heads.net/avatar/${uuid}/8`
+  return `https://mc-heads.net/avatar/${uuid}`
 }
