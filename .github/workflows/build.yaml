@@ -30,7 +30,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: website/pnpm-lock.yaml
       - name: Build website
-        run: cd website && pnpm install --frozen-lockfile && pnpm build
+        run: |
+          cd website 
+          pnpm install --frozen-lockfile
+          pnpm build
       - name: Test
         run: go test ./...
 
@@ -61,7 +64,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: website/pnpm-lock.yaml
       - name: Build website
-        run: cd website && pnpm install --frozen-lockfile && pnpm build
+        run: |
+          cd website 
+          pnpm install --frozen-lockfile
+          pnpm build
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v7
         with:
