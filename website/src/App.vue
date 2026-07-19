@@ -164,7 +164,7 @@ onUnmounted(() => {
       <span class="text-[0.65rem] uppercase tracking-[0.15em] text-muted">Leaderboard</span>
       <div class="flex-1 h-px bg-white/8"></div>
     </div>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 mb-10">
       <PlayerRow v-for="(player, i) in players" :player="player" :index="i" :max="maxHours" />
     </div>
   </div>
