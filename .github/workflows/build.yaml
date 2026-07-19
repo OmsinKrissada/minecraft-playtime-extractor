@@ -37,7 +37,7 @@ jobs:
       - name: Test
         run: go test ./...
 
-  build:
+  build-publish:
     name: Build
     runs-on: ubuntu-latest
     needs: test
